@@ -164,15 +164,12 @@ df_cleaned = df_cleaned.dropna()
 after = df_cleaned.shape[0]
 remove_nan = before - after
 
-print(f'Total rows removed: {remove_nan}')
-
 # Remove duplicate values
 
 before = df_cleaned.shape[0]
 df_cleaned = df_cleaned.drop_duplicates(subset=['peso_avg', 'presion_avg', 'presion_max', 'visco_max'])
 after = df_cleaned.shape[0]
 remove_duplicates = before - after
-print(f'Total rows removed: {remove_duplicates}')
 
 st.write(df_cleaned)
 
@@ -183,8 +180,8 @@ percentile_95 = np.percentile(df_cleaned['visco_max'], 95)
 df_cleaned['visco_max'] = np.where(df_cleaned['visco_max'] > 8000, percentile_95, df_cleaned['visco_max'] )
 
 # Low or 0 values
-percentile_5 = np.percentile(df_cleaned['visco_max'], 5)
-df_cleaned['visco_max'] = np.where(df_cleaned['visco_max'] <= 0, percentile_5, df_cleaned['visco_max'] )
+percentile_50 = np.percentile(df_cleaned['visco_max'], 50)
+df_cleaned['visco_max'] = np.where(df_cleaned['visco_max'] <= 0, percentile_50, df_cleaned['visco_max'] )
 
 
 # Repair densidad_max
@@ -193,6 +190,7 @@ df_cleaned['visco_max'] = np.where(df_cleaned['visco_max'] <= 0, percentile_5, d
 percentile_5 = np.percentile(df_cleaned['densidad_max'], 5)
 df_cleaned['densidad_max'] = np.where(df_cleaned['densidad_max'] <= 0, percentile_5, df_cleaned['densidad_max'] )
 
+df_cleaned = df_cleaned[df_cleaned['densidad_max'] > 5000]
 
 st.markdown(f"""
 Changes made:
@@ -253,5 +251,7 @@ input features that have a strong enough correlation to train the model:
 """)
 
 st.write(df_cleaned)
+
+df_cleaned.to_csv(f'cleaned_data.csv')
 
 st.markdown(f'Final dataset shape: {df_cleaned.shape}')
