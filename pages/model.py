@@ -17,11 +17,11 @@ from sklearn.metrics import r2_score
 st.title("Data Creation/Evaluation")
 
 # Load cleaned dataset
-features_columns = ['peso_avg', 'presion_avg', 'presion_max', 'visco_max']
+feature_columns = ['peso_avg', 'presion_avg', 'presion_max', 'visco_max']
 target_columns = ['densidad_max']
 
 df = pd.read_csv('cleaned_data.csv')
-df = df[features_columns + target_columns]
+df = df[feature_columns + target_columns]
 
 st.write(df.head())
 

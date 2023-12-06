@@ -58,6 +58,7 @@ df = df.replace('phase_3.Recirculacion.Presion_avg', 'presion_avg')
 df = df.replace('phase_3.Recirculacion.Presion_max', 'presion_max')
 df = df.replace('phase_3.Recirculacion.Visco_max', 'visco_max')
 df = df.replace('phase_3.Recirculacion.Densidad_max', 'densidad_max')
+df = df.replace('total_duration', 'phase_global')
 
 assert all(val != 'non_value_operating_time' for val in df['phase'])
 
@@ -91,7 +92,7 @@ Changes made:
 
 # Create cleaned dataframe
 
-cleaned_columns = ['phase_0', 'phase_1', 'phase_2', 'duration', 'peso_avg', 'presion_avg', 'presion_max', 'visco_max', 'total_duration', 'densidad_max']
+cleaned_columns = ['phase_0', 'phase_1', 'phase_2', 'duration', 'peso_avg', 'presion_avg', 'presion_max', 'visco_max', 'phase_global', 'densidad_max']
 
 df_cleaned = pd.DataFrame(columns=cleaned_columns)
 
@@ -121,7 +122,14 @@ for id in df['id'].unique():
     # Concat with the main dataframe
     df_cleaned = pd.concat([df_cleaned, cleaned], ignore_index=True)
 
-st.markdown(f'## The new dataset! Shape: {df_cleaned.shape}')
+# Create duration_min column
+df_cleaned['duration_min'] = df_cleaned['duration'] / 60
+
+# Set order of the columns
+order = ['phase_0', 'phase_1', 'phase_2', 'duration', 'duration_min', 'peso_avg', 'presion_avg', 'presion_max', 'visco_max', 'phase_global', 'densidad_max']
+df_cleaned = df_cleaned[order]
+
+st.markdown(f'## Behold The new Dataset! Shape: {df_cleaned.shape}')
 
 st.write(df_cleaned)
 
@@ -171,8 +179,6 @@ df_cleaned = df_cleaned.drop_duplicates(subset=['peso_avg', 'presion_avg', 'pres
 after = df_cleaned.shape[0]
 remove_duplicates = before - after
 
-st.write(df_cleaned)
-
 # Repair visco_max
 
 # High values
@@ -199,18 +205,11 @@ Changes made:
 - Remove duplicated values | {remove_duplicates} rows
 - Repair visco_max
 - Repair densidad_max
+- Create duration in minutes column
 """)
 
 st.markdown(f'## Correlation Test')
 
-# fig = px.density_heatmap(data_frame=df_cleaned.corr())
-
-# st.plotly_chart(fig)
-
-# fig.update_layout(
-#     title_text='Correlation Matrix',
-# )
-# Calcular a matriz de correlação
 correlation_matrix = df_cleaned.corr()
 
 # Criar um subplot
@@ -218,19 +217,6 @@ fig = make_subplots(
     rows=1, cols=1,
     subplot_titles=['Heatmap de Correlação']
 )
-
-# # Criar o trace de heatmap
-# heatmap_trace = go.Heatmap(
-#     x=correlation_matrix.columns,
-#     y=correlation_matrix.columns,
-#     z=correlation_matrix.values,
-#     colorbar=dict(title='Correlação'),
-#     zmin=-1, zmax=1,
-#     hovertemplate='Correlação: %{z:.2f}<extra></extra>'
-# )
-
-# # Adicionar o trace ao subplot
-# fig.add_trace(heatmap_trace, row=1, col=1)
 
 fig = px.imshow(df_cleaned.corr(), text_auto=True, aspect='auto')
 
@@ -250,8 +236,16 @@ input features that have a strong enough correlation to train the model:
 - visco_max
 """)
 
+st.markdown(f'## Final Dataset:')
+
 st.write(df_cleaned)
 
+st.markdown(f'Shape: {df_cleaned.shape}')
+
+# Save to csv
 df_cleaned.to_csv(f'cleaned_data.csv')
+
+# Save to xlsx
+df_cleaned.to_excel(f'cleaned_data.xlsx')
 
 st.markdown(f'Final dataset shape: {df_cleaned.shape}')
