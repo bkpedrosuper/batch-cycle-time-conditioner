@@ -17,18 +17,8 @@ st.write(df.describe())
 st.markdown('## Check features types')
 st.write(df.dtypes)
 
-st.markdown('## Now, lets remove every column that has the same value in all dataset')
-st.markdown('Check which columns have different values')
-
-columns_to_drop = []
-for col in df.columns:
-    unique = df[col].unique().shape[0]
-    if unique == 1:
-        
-        columns_to_drop.append(col)
-
-st.write(f'Columns to drop: {columns_to_drop}')
-df = df.drop(columns=columns_to_drop)
+st.markdown('## Check INCOMPLETE values')
+st.write(df[df['model_complete'] == 'INCOMPLETE'].head(10))
 
 # st.write('## Check how the features are distributed')
 

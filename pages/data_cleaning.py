@@ -185,18 +185,18 @@ remove_duplicates = before - after
 percentile_95 = np.percentile(df_cleaned['visco_max'], 95)
 df_cleaned['visco_max'] = np.where(df_cleaned['visco_max'] > 8000, percentile_95, df_cleaned['visco_max'] )
 
-# Low or 0 values
-percentile_50 = np.percentile(df_cleaned['visco_max'], 50)
-df_cleaned['visco_max'] = np.where(df_cleaned['visco_max'] <= 0, percentile_50, df_cleaned['visco_max'] )
+# # Low or 0 values
+# percentile_50 = np.percentile(df_cleaned['visco_max'], 50)
+# df_cleaned['visco_max'] = np.where(df_cleaned['visco_max'] <= 0, percentile_50, df_cleaned['visco_max'] )
 
 
-# Repair densidad_max
+# # Repair densidad_max
 
 # Low or 0 values
 percentile_5 = np.percentile(df_cleaned['densidad_max'], 5)
 df_cleaned['densidad_max'] = np.where(df_cleaned['densidad_max'] <= 0, percentile_5, df_cleaned['densidad_max'] )
 
-df_cleaned = df_cleaned[df_cleaned['densidad_max'] > 5000]
+df_cleaned = df_cleaned[df_cleaned['densidad_max'] > 0]
 
 st.markdown(f"""
 Changes made:
@@ -204,7 +204,6 @@ Changes made:
 - Remove NaN Values | {remove_nan} rows
 - Remove duplicated values | {remove_duplicates} rows
 - Repair visco_max
-- Repair densidad_max
 - Create duration in minutes column
 """)
 
