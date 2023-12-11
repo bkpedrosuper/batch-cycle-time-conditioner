@@ -148,7 +148,7 @@ for i in range(1, rows + 1):
     for j in range(1, cols + 1):
         if cc >= len(df_cleaned.columns):
             break
-        box_fig = px.box(df_cleaned, y=df_cleaned.columns[cc], title=f'BoxPlots for {df_cleaned.columns[cc]}')
+        box_fig = px.box(df_cleaned, y=df_cleaned.columns[cc], title=f'BoxPlots for {df_cleaned.columns[cc]}', template='seaborn')
         fig.update_yaxes(title_text='Values', row=i, col=j)
         fig.add_trace(go.Box(box_fig['data'][0]), row=i, col=j)
 
@@ -217,7 +217,7 @@ fig = make_subplots(
     subplot_titles=['Heatmap de Correlação']
 )
 
-fig = px.imshow(df_cleaned.corr(), text_auto=True, aspect='auto')
+fig = px.imshow(df_cleaned.corr(), text_auto=True, aspect='auto', template='seaborn')
 
 # Atualizar layout
 fig.update_layout(title_text='Heatmap de Correlação', width=800, height=600)
