@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 
 st.title('Data Science Challenge - Fabric Conditioner new predictive system and Batch Cycle Time Monitoring')
+st.write('Version 1.0.0')
 
 
 

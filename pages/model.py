@@ -32,7 +32,7 @@ st.markdown(f'Shape: {df.shape}')
 # Setting X and y
 X = df.iloc[:, :-1]
 y = df.iloc[:, -1]
-N_FOLDS = 10
+N_FOLDS = 5
 
 st.markdown(f'## Creating Regression Models')
 
