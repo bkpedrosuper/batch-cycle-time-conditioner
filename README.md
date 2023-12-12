@@ -10,3 +10,25 @@ Also a [Streamlit app](https://batch-cycle-time-conditioner.streamlit.app)!
 - Random Forest Model
 - Model Evaluation
 - Results
+
+## Install Requirements
+
+Using Poetry:
+
+```
+poetry install
+```
+
+Using pip:
+
+```
+pip install -r requirements.txt
+```
+
+## Run Project:
+
+```
+streamlit run app.py
+```
+
+The project will be available in a Local URL: http://localhost:8501
